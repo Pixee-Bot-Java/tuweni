@@ -2,6 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0
 package org.apache.tuweni.config;
 
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import static org.apache.tuweni.config.ConfigurationErrors.noErrors;
 import static org.apache.tuweni.config.ConfigurationErrors.singleError;
 
@@ -189,7 +191,7 @@ public interface PropertyValidator<T> {
     return (key, position, value) -> {
       if (value != null) {
         try {
-          new URL(value);
+          Urls.create(value, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
         } catch (MalformedURLException e) {
           return singleError(position, "Value of property '" + key + "' is not a valid URL", e);
         }
