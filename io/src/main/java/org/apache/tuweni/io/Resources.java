@@ -2,6 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0
 package org.apache.tuweni.io;
 
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import static org.apache.tuweni.io.Streams.enumerationStream;
 
 import java.io.IOException;
@@ -279,7 +281,7 @@ public final class Resources {
               }
               URL entryURL;
               try {
-                entryURL = new URL(baseUrl, relativePath);
+                entryURL = Urls.create(baseUrl, relativePath, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
               } catch (MalformedURLException e) {
                 // should not happen
                 throw new RuntimeException(e);
