@@ -2,6 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0
 package org.apache.tuweni.io.file;
 
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import static org.apache.tuweni.io.file.Files.atomicReplace;
 import static org.apache.tuweni.io.file.Files.copyResource;
 import static org.apache.tuweni.io.file.Files.createFileIfMissing;
@@ -55,7 +57,7 @@ class FilesTest {
     Files.createDirectories(tempDir.resolve("org/something"));
     Files.write(tempDir.resolve("org/something/test.txt"), "foo".getBytes(StandardCharsets.UTF_8));
     URLClassLoader classLoader =
-        new URLClassLoader(new URL[] {new URL("file:" + tempDir.toString() + "/")});
+        new URLClassLoader(new URL[] {Urls.create("file:" + tempDir.toString() + "/", Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS)});
 
     Path file = copyResource(classLoader, "org/something/test.txt", tempDir.resolve("test.txt"));
     assertTrue(Files.exists(file));
